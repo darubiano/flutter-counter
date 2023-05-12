@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hello_world_app/provider/theme_provider.dart';
+import 'package:provider/provider.dart';
 
 class CounterScreen extends StatefulWidget {
   const CounterScreen({super.key});
@@ -18,23 +20,33 @@ class _CounterScreenState extends State<CounterScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final colors = Theme.of(context).colorScheme;
+    final themeProvider = context.watch<ThemeProvider>();
     return Scaffold(
-      backgroundColor: Colors.blueGrey,
+      backgroundColor: colors.primary,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          CircleAvatar(
+            child: IconButton(
+              onPressed: () {
+                themeProvider.changeTheme();
+              },
+              icon: const Icon(Icons.color_lens),
+            ),
+          ),
           FittedBox(
             child: Text('$clickCounter',
                 style: TextStyle(
-                  fontSize: calcularSize(size, 0.25),
+                  fontSize: calcularSize(size, 0.2),
                   fontWeight: FontWeight.w400,
                 )),
           ),
           FittedBox(
             child: Text(
               "Click${clickCounter > 0 ? 's' : ''}",
-              style: TextStyle(fontSize: calcularSize(size, 0.15)),
+              style: TextStyle(fontSize: calcularSize(size, 0.1)),
             ),
           ),
           Row(
@@ -82,13 +94,12 @@ class CustomButton extends StatelessWidget {
   final Color color;
   final double? size;
   final VoidCallback onPressed;
-  const CustomButton({
-    super.key,
-    required this.icon,
-    this.color = Colors.black26,
-    required this.onPressed,
-    this.size
-  });
+  const CustomButton(
+      {super.key,
+      required this.icon,
+      this.color = Colors.black26,
+      required this.onPressed,
+      this.size});
   @override
   Widget build(BuildContext context) {
     return SizedBox(
